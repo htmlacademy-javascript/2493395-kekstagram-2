@@ -1,20 +1,20 @@
 const isStringLengthValid = (string, maxLength) => {
   return string.length <= maxLength;
-}
+};
 
 console.log(isStringLengthValid('dfgdfgdfg', 12));
 console.log(isStringLengthValid('dfdfgdfg', 5));
 console.log(isStringLengthValid('dfgdfgdfgasd', 12));
 
 const isPalindrome = (string) => {
-  string = string.replaceAll(" ", "").toLowerCase();
+  string = string.replaceAll(' ', '').toLowerCase();
   let cleanedString = '';
 
   for (let i = (string.length - 1); i >= 0; i--) {
     cleanedString += string[i];
   }
   return cleanedString === string;
-}
+};
 
 // Строка является палиндромом
 console.log(isPalindrome('топот')); // true
@@ -28,10 +28,10 @@ const getNumbers = (string) => {
   let isNumber;
   for (let i = 0; i < string.length; i++) {
     isNumber = parseInt(string[i], 10);
-    Number.isNaN(isNumber) ? '' : newString += isNumber;
+    newString += Number.isNaN(isNumber) ? '' : isNumber;
   }
-  return newString;
-}
+  return newString === '' ? NaN : newString;
+};
 
 console.log(getNumbers('2023 год')); // 2023
 console.log(getNumbers('ECMAScript 2022')); // 2022
