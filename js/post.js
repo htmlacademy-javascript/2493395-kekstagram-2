@@ -17,7 +17,7 @@ const uniquePhotoGenerator = getUniqueRandomElement(1, POSTS_COUNT);
 export const createPost = () => {
   return {
     id: uniqueIdGenerator(),
-    url: `photo/${uniquePhotoGenerator()}.jpg`,
+    url: `photos/${uniquePhotoGenerator()}.jpg`,
     description: getRandomArrayElement(PHOTO_CAPTIONS),
     likes: getRandomInteger(15, 200),
     comments: getRandomComments(0, 30)
