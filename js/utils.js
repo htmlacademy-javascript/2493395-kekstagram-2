@@ -23,3 +23,7 @@ export const getUniqueRandomElement = (min, max) => {
     return currentValue;
   };
 }
+
+export const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export const isEnterKey = (evt) => evt.key === 'Enter';
