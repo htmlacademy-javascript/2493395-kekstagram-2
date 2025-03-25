@@ -9,6 +9,7 @@ import {
   openBigPicture
 } from './imageViewer.js';
 import './formValidator.js';
+import './effectsSlider.js';
 
 
 console.log(generatePosts);
