@@ -1,23 +1,18 @@
-import {
-  generatePosts
-} from './post.js';
-
-
 const picturesContainer = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content.querySelector('a');
-
-const similarPosts = generatePosts;
 
 export const renderPosts = function (posts) {
   const similarListFragment = document.createDocumentFragment();
 
-  similarPosts.forEach(({
+  posts.forEach(({
+    id,
     url,
     description,
     likes,
     comments
   }) => {
     const postElement = pictureTemplate.cloneNode(true);
+    postElement.dataset.pictureId = id;
     postElement.querySelector('.picture__img').src = url;
     postElement.querySelector('.picture__img').alt = description;
     postElement.querySelector('.picture__likes').textContent = likes;
