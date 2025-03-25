@@ -79,6 +79,17 @@ export const openBigPicture = (pictureId) => {
   renderComments(currentPost.comments);
 }
 
+const renderComments = (currentPostComments) => {
+  comments = currentPostComments;
+  currentCount = 0;
+
+  commentsLoader.removeEventListener('click', renderNextComments);
+  commentsLoader.addEventListener('click', renderNextComments);
+
+  renderNextComments();
+};
+
+
 const renderNextComments = () => {
   const commentsFragment = document.createDocumentFragment();
   const renderedComments = comments.slice(currentCount, currentCount + COUNT_STEP);
@@ -93,7 +104,7 @@ const renderNextComments = () => {
   });
 
   commentsContainer.appendChild(commentsFragment);
-  commentCount.firstChild.textContent = `${renderedComments.length + currentCount} из `; // Исправляем счетчик
+  commentCount.firstChild.textContent = `${renderedComments.length + currentCount} из `;
   commentCount.querySelector('.social__comment-total-count').textContent = comments.length;
 
   currentCount += COUNT_STEP;
@@ -105,20 +116,7 @@ const renderNextComments = () => {
   }
 };
 
-const renderComments = (currentPostComments) => {
-  comments = currentPostComments;
-  currentCount = 0;
-
-  commentsLoader.removeEventListener('click', renderNextComments);
-  commentsLoader.addEventListener('click', renderNextComments);
-
-  renderNextComments();
-};
-
 const clearComments = () => {
   currentCount = 0;
   commentsContainer.innerHTML = '';
-
-  commentsLoader.classList.remove('hidden');
-  commentsLoader.addEventListener('click', renderNextComments);
 }

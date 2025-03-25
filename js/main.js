@@ -7,7 +7,8 @@ import {
 import {
   picturesContainer,
   openBigPicture
-} from './ImageViewer.js';
+} from './imageViewer.js';
+import './formValidator.js';
 
 
 console.log(generatePosts);
