@@ -7,7 +7,9 @@ import {
   generatePosts
 } from './post.js';
 
-
+const COUNT_STEP = 5;
+let currentCount = 0;
+let comments = [];
 export const picturesContainer = document.querySelector('.pictures');
 const body = document.querySelector('body');
 const pictureBig = document.querySelector('.big-picture');
@@ -20,6 +22,8 @@ const commentTemplate = document.querySelector('.social__comment');
 
 const commentCount = document.querySelector('.social__comment-count');
 const commentsLoader = document.querySelector('.comments-loader');
+
+commentsContainer.innerHTML = '';
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -39,6 +43,7 @@ function closeUserModal() {
   pictureBig.classList.add('hidden');
   body.classList.remove('modal-open');
 
+  clearComments();
   document.removeEventListener('keydown', onDocumentKeydown);
 }
 
@@ -71,10 +76,14 @@ export const openBigPicture = (pictureId) => {
   imgBigPicture.src = currentPost.url;
   likesBigPicture.textContent = currentPost.likes;
 
-  commentsContainer.innerHTML = '';
-  const commentsFragment = document.createDocumentFragment();
+  renderComments(currentPost.comments);
+}
 
-  currentPost.comments.forEach((comment) => {
+const renderNextComments = () => {
+  const commentsFragment = document.createDocumentFragment();
+  const renderedComments = comments.slice(currentCount, currentCount + COUNT_STEP);
+
+  renderedComments.forEach((comment) => {
     const socialComment = commentTemplate.cloneNode(true);
     socialComment.querySelector('.social__picture').src = comment.avatar;
     socialComment.querySelector('.social__text').textContent = comment.message;
@@ -84,7 +93,32 @@ export const openBigPicture = (pictureId) => {
   });
 
   commentsContainer.appendChild(commentsFragment);
+  commentCount.firstChild.textContent = `${renderedComments.length + currentCount} из `; // Исправляем счетчик
+  commentCount.querySelector('.social__comment-total-count').textContent = comments.length;
 
-  commentCount.classList.add('hidden');
-  commentsLoader.classList.add('hidden');
+  currentCount += COUNT_STEP;
+
+  if (currentCount >= comments.length) {
+    commentsLoader.classList.add('hidden');
+  } else {
+    commentsLoader.classList.remove('hidden');
+  }
+};
+
+const renderComments = (currentPostComments) => {
+  comments = currentPostComments;
+  currentCount = 0;
+
+  commentsLoader.removeEventListener('click', renderNextComments);
+  commentsLoader.addEventListener('click', renderNextComments);
+
+  renderNextComments();
+};
+
+const clearComments = () => {
+  currentCount = 0;
+  commentsContainer.innerHTML = '';
+
+  commentsLoader.classList.remove('hidden');
+  commentsLoader.addEventListener('click', renderNextComments);
 }
