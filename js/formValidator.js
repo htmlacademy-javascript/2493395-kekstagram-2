@@ -5,7 +5,7 @@ import {
 
 const MAX_LENGTH_COMMENT = 140;
 const MAX_HASHTAGS_COUNT = 5;
-const MAX_HASHTAG_LENGTH = 20;
+const SCALE_STEP = 0.25;
 const uploadForm = document.querySelector('.img-upload__form');
 const imgInput = uploadForm.querySelector('.img-upload__input');
 const imgOverlay = uploadForm.querySelector('.img-upload__overlay');
@@ -13,6 +13,11 @@ const body = document.querySelector('body');
 const cancelButton = uploadForm.querySelector('.img-upload__cancel');
 const hashtagInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
+const bigger = uploadForm.querySelector('.scale__control--bigger');
+const smaller = uploadForm.querySelector('.scale__control--smaller');
+const scaleValue = uploadForm.querySelector('.scale__control--value');
+const img = uploadForm.querySelector('.img-upload__preview img');
+let scale = 1;
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -48,6 +53,22 @@ cancelButton.addEventListener('keydown', (evt) => {
     closeImgModal();
   }
 });
+
+const onBiggerClick = () => {
+  if (scale < 1) {
+    scale += SCALE_STEP;
+    img.style.transform = `scale(${scale})`;
+    scaleValue.value = `${scale * 100}%`;
+  }
+}
+
+const onSmallerClick = () => {
+  if (scale > SCALE_STEP) {
+    scale -= SCALE_STEP;
+    img.style.transform = `scale(${scale})`;
+    scaleValue.value = `${scale * 100}%`;
+  }
+}
 
 const validateHashtag = (value) => {
   if (!value) return true;
@@ -147,3 +168,6 @@ commentInput.addEventListener('keydown', (evt) => {
     evt.stopPropagation();
   }
 });
+
+bigger.addEventListener('click', onBiggerClick);
+smaller.addEventListener('click', onSmallerClick);
