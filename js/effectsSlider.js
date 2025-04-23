@@ -1,13 +1,12 @@
 import {
   EFFECTS
-} from './constants.js'
+} from './constants.js';
 
 const sliderContainer = document.querySelector('.img-upload__effect-level');
 const sliderElement = document.querySelector('.effect-level__slider');
 const effectValue = document.querySelector('.effect-level__value');
 const img = document.querySelector('.img-upload__preview img');
 const effectsList = document.querySelector('.effects__list');
-const effectRadios = document.querySelectorAll('.effects__radio');
 
 sliderContainer.classList.add('hidden');
 

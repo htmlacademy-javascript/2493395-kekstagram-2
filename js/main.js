@@ -1,5 +1,5 @@
 import {
-  generatePosts
+  postsPromise
 } from './post.js';
 import {
   renderPosts
@@ -10,16 +10,16 @@ import {
 } from './imageViewer.js';
 import './formValidator.js';
 import './effectsSlider.js';
+import './api.js';
 
+postsPromise.then(postsData => {
+  console.log(postsData);
+  renderPosts(postsData);
 
-console.log(generatePosts);
-
-renderPosts(generatePosts);
-
-picturesContainer.addEventListener('click', (evt) => {
-  const currentPicture = evt.target.closest('.picture');
-
-  if (currentPicture) {
-    openBigPicture(currentPicture.dataset.pictureId);
-  }
+  picturesContainer.addEventListener('click', (evt) => {
+    const currentPicture = evt.target.closest('.picture');
+    if (currentPicture) {
+      openBigPicture(currentPicture.dataset.pictureId);
+    }
+  });
 });

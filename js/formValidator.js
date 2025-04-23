@@ -31,6 +31,9 @@ function openImgModal() {
   body.classList.add('modal-open');
 
   document.addEventListener('keydown', onDocumentKeydown);
+
+  bigger.addEventListener('click', onBiggerClick);
+  smaller.addEventListener('click', onSmallerClick);
 }
 
 function closeImgModal() {
@@ -38,9 +41,16 @@ function closeImgModal() {
   body.classList.remove('modal-open');
   imgInput.value = '';
   document.removeEventListener('keydown', onDocumentKeydown);
+
+  bigger.removeEventListener('click', onBiggerClick);
+  smaller.removeEventListener('click', onSmallerClick);
+
+  scale = 1;
+  img.style.transform = `scale(${scale})`;
+  scaleValue.value = `${scale * 100}%`;
 }
 
-imgInput.addEventListener('change', (event) => {
+imgInput.addEventListener('change', () => {
   openImgModal();
 });
 
@@ -60,7 +70,7 @@ const onBiggerClick = () => {
     img.style.transform = `scale(${scale})`;
     scaleValue.value = `${scale * 100}%`;
   }
-}
+};
 
 const onSmallerClick = () => {
   if (scale > SCALE_STEP) {
@@ -68,11 +78,12 @@ const onSmallerClick = () => {
     img.style.transform = `scale(${scale})`;
     scaleValue.value = `${scale * 100}%`;
   }
-}
+};
 
 const validateHashtag = (value) => {
-  if (!value) return true;
-
+  if (!value) {
+    return true;
+  }
   const hashtags = value.trim().toLowerCase().split(/\s+/).filter(Boolean);
 
   if (hashtags.length > MAX_HASHTAGS_COUNT) {
@@ -98,8 +109,9 @@ const validateHashtag = (value) => {
 };
 
 const getHashtagErrorMessage = (value) => {
-  if (!value) return '';
-
+  if (!value) {
+    return '';
+  }
   const hashtags = value.trim().toLowerCase().split(/\s+/).filter(Boolean);
 
   if (hashtags.length > MAX_HASHTAGS_COUNT) {
@@ -123,15 +135,9 @@ const getHashtagErrorMessage = (value) => {
   return '';
 };
 
-const validateComment = (value) => {
-  return value.length <= MAX_LENGTH_COMMENT;
-};
+const validateComment = (value) => value.length <= MAX_LENGTH_COMMENT;
 
-const getCommentErrorMessage = (value) => {
-  return value.length > MAX_LENGTH_COMMENT ?
-    `Длина комментария не может быть больше ${MAX_LENGTH_COMMENT} символов` :
-    '';
-};
+const getCommentErrorMessage = (value) => value.length > MAX_LENGTH_COMMENT ? `Длина комментария не может быть больше ${MAX_LENGTH_COMMENT} символов` : '';
 
 const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__form',
