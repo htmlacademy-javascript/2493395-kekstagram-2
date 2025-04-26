@@ -4,7 +4,7 @@ import {
 } from './utils.js';
 
 import {
-  generatePosts
+  postsPromise
 } from './post.js';
 
 const COUNT_STEP = 5;
@@ -24,6 +24,48 @@ const commentCount = document.querySelector('.social__comment-count');
 const commentsLoader = document.querySelector('.comments-loader');
 
 commentsContainer.innerHTML = '';
+
+const clearComments = () => {
+  currentCount = 0;
+  commentsContainer.innerHTML = '';
+};
+
+const renderNextComments = () => {
+  const commentsFragment = document.createDocumentFragment();
+  const renderedComments = comments.slice(currentCount, currentCount + COUNT_STEP);
+
+  renderedComments.forEach((comment) => {
+    const socialComment = commentTemplate.cloneNode(true);
+    socialComment.querySelector('.social__picture').src = comment.avatar;
+    socialComment.querySelector('.social__text').textContent = comment.message;
+    socialComment.querySelector('.social__picture').alt = comment.name;
+
+    commentsFragment.appendChild(socialComment);
+  });
+
+  commentsContainer.appendChild(commentsFragment);
+  commentCount.firstChild.textContent = `${renderedComments.length + currentCount} из `;
+  commentCount.querySelector('.social__comment-total-count').textContent = comments.length;
+
+  currentCount += COUNT_STEP;
+
+  if (currentCount >= comments.length) {
+    commentsLoader.classList.add('hidden');
+  } else {
+    commentsLoader.classList.remove('hidden');
+  }
+};
+
+const renderComments = (currentPostComments) => {
+  comments = currentPostComments;
+  currentCount = 0;
+
+  commentsLoader.removeEventListener('click', renderNextComments);
+  commentsLoader.addEventListener('click', renderNextComments);
+
+  renderNextComments();
+};
+
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -70,53 +112,20 @@ cancelButton.addEventListener('keydown', (evt) => {
 });
 
 export const openBigPicture = (pictureId) => {
-  const currentPost = generatePosts.find((post) => post.id === Number(pictureId));
+  postsPromise.then(posts => {
+    const currentPost = posts.find(post => post.id === Number(pictureId));
 
-  descriptionBigPicture.textContent = currentPost.description;
-  imgBigPicture.src = currentPost.url;
-  likesBigPicture.textContent = currentPost.likes;
+    if (!currentPost) {
+      console.error('Post not found');
+      return;
+    }
 
-  renderComments(currentPost.comments);
-}
+    descriptionBigPicture.textContent = currentPost.description;
+    imgBigPicture.src = currentPost.url;
+    likesBigPicture.textContent = currentPost.likes;
 
-const renderComments = (currentPostComments) => {
-  comments = currentPostComments;
-  currentCount = 0;
-
-  commentsLoader.removeEventListener('click', renderNextComments);
-  commentsLoader.addEventListener('click', renderNextComments);
-
-  renderNextComments();
-};
-
-
-const renderNextComments = () => {
-  const commentsFragment = document.createDocumentFragment();
-  const renderedComments = comments.slice(currentCount, currentCount + COUNT_STEP);
-
-  renderedComments.forEach((comment) => {
-    const socialComment = commentTemplate.cloneNode(true);
-    socialComment.querySelector('.social__picture').src = comment.avatar;
-    socialComment.querySelector('.social__text').textContent = comment.message;
-    socialComment.querySelector('.social__picture').alt = comment.name;
-
-    commentsFragment.appendChild(socialComment);
+    renderComments(currentPost.comments || []);
+  }).catch(error => {
+    console.error('Error loading post:', error);
   });
-
-  commentsContainer.appendChild(commentsFragment);
-  commentCount.firstChild.textContent = `${renderedComments.length + currentCount} из `;
-  commentCount.querySelector('.social__comment-total-count').textContent = comments.length;
-
-  currentCount += COUNT_STEP;
-
-  if (currentCount >= comments.length) {
-    commentsLoader.classList.add('hidden');
-  } else {
-    commentsLoader.classList.remove('hidden');
-  }
 };
-
-const clearComments = () => {
-  currentCount = 0;
-  commentsContainer.innerHTML = '';
-}
