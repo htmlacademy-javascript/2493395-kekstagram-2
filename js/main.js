@@ -13,7 +13,6 @@ import './effectsSlider.js';
 import './api.js';
 
 postsPromise.then(postsData => {
-  console.log(postsData);
   renderPosts(postsData);
 
   picturesContainer.addEventListener('click', (evt) => {

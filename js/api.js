@@ -25,6 +25,4 @@ const load = async (route, method = httpMethods.GET, body = null) => {
 
 export const getData = load(route.GET_DATA);
 
-console.log(getData);
-
 export const sendData = (formData) => load(route.SEND_DATA, httpMethods.POST, formData);

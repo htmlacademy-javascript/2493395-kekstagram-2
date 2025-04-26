@@ -2,7 +2,7 @@ import {
   EFFECTS
 } from './constants.js';
 
-const sliderContainer = document.querySelector('.img-upload__effect-level');
+export const sliderContainer = document.querySelector('.img-upload__effect-level');
 const sliderElement = document.querySelector('.effect-level__slider');
 const effectValue = document.querySelector('.effect-level__value');
 const img = document.querySelector('.img-upload__preview img');
