@@ -1,5 +1,5 @@
 import {
-  generatePosts
+  postsPromise
 } from './post.js';
 import {
   renderPosts
@@ -8,18 +8,33 @@ import {
   picturesContainer,
   openBigPicture
 } from './imageViewer.js';
+import {
+  initFilters
+} from './imgFilters.js';
 import './formValidator.js';
 import './effectsSlider.js';
 
+let currentPosts = [];
 
-console.log(generatePosts);
+const setupPictureListeners = () => {
+  picturesContainer.addEventListener('click', (evt) => {
+    const picture = evt.target.closest('.picture');
+    if (picture) {
+      const post = currentPosts.find((p) => p.id === +picture.dataset.pictureId);
+      if (post) {
+        openBigPicture(post);
+      }
+    }
+  });
+};
 
-renderPosts(generatePosts);
+const updatePosts = (posts) => {
+  currentPosts = posts;
+  renderPosts(posts);
+  setupPictureListeners();
+};
 
-picturesContainer.addEventListener('click', (evt) => {
-  const currentPicture = evt.target.closest('.picture');
-
-  if (currentPicture) {
-    openBigPicture(currentPicture.dataset.pictureId);
-  }
+postsPromise.then((posts) => {
+  updatePosts(posts);
+  initFilters(posts, updatePosts);
 });
