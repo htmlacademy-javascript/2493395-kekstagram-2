@@ -27,6 +27,23 @@ const scaleValue = uploadForm.querySelector('.scale__control--value');
 const img = uploadForm.querySelector('.img-upload__preview img');
 let scale = 1;
 
+
+const onBiggerClick = () => {
+  if (scale < 1) {
+    scale += SCALE_STEP;
+    img.style.transform = `scale(${scale})`;
+    scaleValue.value = `${scale * 100}%`;
+  }
+};
+
+const onSmallerClick = () => {
+  if (scale > SCALE_STEP) {
+    scale -= SCALE_STEP;
+    img.style.transform = `scale(${scale})`;
+    scaleValue.value = `${scale * 100}%`;
+  }
+};
+
 fileInput.addEventListener('change', function () {
   const file = this.files[0];
   if (file) {
@@ -78,22 +95,6 @@ cancelButton.addEventListener('keydown', (evt) => {
     closeImgModal();
   }
 });
-
-const onBiggerClick = () => {
-  if (scale < 1) {
-    scale += SCALE_STEP;
-    img.style.transform = `scale(${scale})`;
-    scaleValue.value = `${scale * 100}%`;
-  }
-};
-
-const onSmallerClick = () => {
-  if (scale > SCALE_STEP) {
-    scale -= SCALE_STEP;
-    img.style.transform = `scale(${scale})`;
-    scaleValue.value = `${scale * 100}%`;
-  }
-};
 
 const validateHashtag = (value) => {
   if (!value) {
@@ -221,12 +222,6 @@ const showSuccessMessage = () => {
 
   document.body.appendChild(successElement);
 
-  const closeSuccessMessage = () => {
-    successElement.remove();
-    document.removeEventListener('keydown', onSuccessEscKeydown);
-    document.removeEventListener('click', onSuccessOutsideClick);
-  };
-
   const onSuccessEscKeydown = (evt) => {
     if (isEscapeKey(evt)) {
       closeSuccessMessage();
@@ -238,6 +233,12 @@ const showSuccessMessage = () => {
       closeSuccessMessage();
     }
   };
+
+  function closeSuccessMessage() {
+    successElement.remove();
+    document.removeEventListener('keydown', onSuccessEscKeydown);
+    document.removeEventListener('click', onSuccessOutsideClick);
+  }
 
   const successButton = successElement.querySelector('.success__button');
   successButton.addEventListener('click', closeSuccessMessage);
@@ -252,12 +253,6 @@ const showErrorMessage = () => {
 
   document.body.appendChild(errorElement);
 
-  const closeErrorMessage = () => {
-    errorElement.remove();
-    document.removeEventListener('keydown', onErrorEscKeydown);
-    document.removeEventListener('click', onErrorOutsideClick);
-  };
-
   const onErrorEscKeydown = (evt) => {
     if (isEscapeKey(evt)) {
       closeErrorMessage();
@@ -269,6 +264,12 @@ const showErrorMessage = () => {
       closeErrorMessage();
     }
   };
+
+  function closeErrorMessage() {
+    errorElement.remove();
+    document.removeEventListener('keydown', onErrorEscKeydown);
+    document.removeEventListener('click', onErrorOutsideClick);
+  }
 
   const errorButton = errorElement.querySelector('.error__button');
   errorButton.addEventListener('click', closeErrorMessage);

@@ -8,17 +8,33 @@ import {
   picturesContainer,
   openBigPicture
 } from './imageViewer.js';
+import {
+  initFilters
+} from './imgFilters.js';
 import './formValidator.js';
 import './effectsSlider.js';
-import './api.js';
 
-postsPromise.then(postsData => {
-  renderPosts(postsData);
+let currentPosts = [];
 
+const setupPictureListeners = () => {
   picturesContainer.addEventListener('click', (evt) => {
-    const currentPicture = evt.target.closest('.picture');
-    if (currentPicture) {
-      openBigPicture(currentPicture.dataset.pictureId);
+    const picture = evt.target.closest('.picture');
+    if (picture) {
+      const post = currentPosts.find((p) => p.id === +picture.dataset.pictureId);
+      if (post) {
+        openBigPicture(post);
+      }
     }
   });
+};
+
+const updatePosts = (posts) => {
+  currentPosts = posts;
+  renderPosts(posts);
+  setupPictureListeners();
+};
+
+postsPromise.then((posts) => {
+  updatePosts(posts);
+  initFilters(posts, updatePosts);
 });

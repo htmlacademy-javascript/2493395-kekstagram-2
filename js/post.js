@@ -10,16 +10,11 @@ const createPost = (data) => ({
   comments: data.comments,
 });
 
-export const postsPromise = getData
-  .then(data => data.map(post => createPost(post)))
-  .catch(() => {
-    showErrorMessage();
-    return [];
-  });
-
 const showErrorMessage = () => {
   const errorTemplate = document.querySelector('#data-error');
-  if (!errorTemplate) return;
+  if (!errorTemplate) {
+    return;
+  }
   const errorFragment = errorTemplate.content.cloneNode(true);
   const errorElement = errorFragment.querySelector('.data-error');
   document.body.appendChild(errorElement);
@@ -27,3 +22,11 @@ const showErrorMessage = () => {
     errorElement.remove();
   }, 5000);
 };
+
+
+export const postsPromise = getData
+  .then((data) => data.map((post) => createPost(post)))
+  .catch(() => {
+    showErrorMessage();
+    return [];
+  });

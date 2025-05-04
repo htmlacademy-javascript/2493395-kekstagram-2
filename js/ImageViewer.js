@@ -112,11 +112,10 @@ cancelButton.addEventListener('keydown', (evt) => {
 });
 
 export const openBigPicture = (pictureId) => {
-  postsPromise.then(posts => {
-    const currentPost = posts.find(post => post.id === Number(pictureId));
+  postsPromise.then((posts) => {
+    const currentPost = posts.find((post) => post.id === Number(pictureId));
 
     if (!currentPost) {
-      console.error('Post not found');
       return;
     }
 
@@ -125,7 +124,5 @@ export const openBigPicture = (pictureId) => {
     likesBigPicture.textContent = currentPost.likes;
 
     renderComments(currentPost.comments || []);
-  }).catch(error => {
-    console.error('Error loading post:', error);
   });
 };

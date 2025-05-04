@@ -12,10 +12,8 @@ export const getComments = async (postId) => {
       comments = post.comments;
     }
 
-    console.log('Комментарии:', comments);
     return comments;
   } catch (error) {
-    console.error('Ошибка загрузки:', error);
     return [];
   }
 };

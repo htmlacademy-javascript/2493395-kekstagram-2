@@ -13,10 +13,10 @@ const route = {
 const errorText = {
   GET: 'ошибка получения данных',
   POST: 'ошибка отправки данных'
-}
+};
 
-const load = async (route, method = httpMethods.GET, body = null) => {
-  const response = await fetch(`${URL}${route}`, {
+const load = async (path, method = httpMethods.GET, body = null) => {
+  const response = await fetch(`${URL}${path}`, {
     method,
     body
   });

@@ -13,8 +13,14 @@ export const handleFormSubmit = async (evt) => {
   try {
     await sendData(formData);
     closeFormModal();
-    console.log('Форма успешно отправлена!');
   } catch (error) {
-    console.error('Ошибка:', error.message);
+
+    const errorMessage = document.createElement('div');
+    errorMessage.className = 'form-error-message';
+    errorMessage.textContent = 'Не удалось отправить форму. Попробуйте ещё раз.';
+    form.appendChild(errorMessage);
+    setTimeout(() => {
+      errorMessage.remove();
+    }, 5000);
   }
 };
